@@ -101,7 +101,6 @@ class Tile(QWidget):
                 self.expandable.emit(self.x, self.y)
         self.start.emit()
 
-
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.RightButton and not self.is_opened:
             self.flag()
@@ -195,6 +194,7 @@ class MainWindow(QMainWindow):
             positions = self.get_surrounding(x, y)
             count_mines = sum(1 if w.is_mine else 0 for w in positions)
             return count_mines
+
         for x in range(0, self.tiles_res):
             for y in range(0, self.tiles_res):
                 tile = self.grid.itemAtPosition(y, x).widget()
@@ -218,16 +218,16 @@ class MainWindow(QMainWindow):
     def show_mines(self):
         for x in range(0, self.tiles_res):
             for y in range(0, self.tiles_res):
-                w = self.grid.itemAtPosition(y, x).widget()
-                if w.is_mine:
-                    w.open()
+                tile = self.grid.itemAtPosition(y, x).widget()
+                if tile.is_mine:
+                    tile.open()
 
     def expand_open(self, x, y):
         for xi in range(max(0, x - 1), min(x + 2, self.tiles_res)):
             for yi in range(max(0, y - 1), min(y + 2, self.tiles_res)):
-                w = self.grid.itemAtPosition(yi, xi).widget()
-                if not w.is_mine:
-                    w.click()
+                tile = self.grid.itemAtPosition(yi, xi).widget()
+                if not tile.is_mine:
+                    tile.click()
 
     def trigger_start(self, *args):
         if self.status == status_ready:
