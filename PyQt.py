@@ -167,19 +167,19 @@ class MainWindow(QMainWindow):
     def init_board(self):
         for x in range(0, self.tiles_res):
             for y in range(0, self.tiles_res):
-                w = Tile(x, y)
-                self.grid.addWidget(w, y, x)
-                w.expandable.connect(self.expand_open)
-                w.start.connect(self.trigger_start)
-                w.failed.connect(self.game_over)
-                w.flag_add.connect(self.add_flag)
-                w.flag_remove.connect(self.remove_flag)
+                tile = Tile(x, y)
+                self.grid.addWidget(tile, y, x)
+                tile.expandable.connect(self.expand_open)
+                tile.start.connect(self.trigger_start)
+                tile.failed.connect(self.game_over)
+                tile.flag_add.connect(self.add_flag)
+                tile.flag_remove.connect(self.remove_flag)
 
     def reset_board(self):
         for x in range(0, self.tiles_res):
             for y in range(0, self.tiles_res):
-                w = self.grid.itemAtPosition(y, x).widget()
-                w.reset()
+                tile = self.grid.itemAtPosition(y, x).widget()
+                tile.reset()
         self.clock.setText("000")
         self.count_flags = self.count_mines
         self.mines.setText("%03d" % self.count_flags)
@@ -187,8 +187,8 @@ class MainWindow(QMainWindow):
         while len(positions) < self.count_mines:
             x, y = random.randint(0, self.tiles_res - 1), random.randint(0, self.tiles_res - 1)
             if (x, y) not in positions:
-                w = self.grid.itemAtPosition(y, x).widget()
-                w.is_mine = True
+                tile = self.grid.itemAtPosition(y, x).widget()
+                tile.is_mine = True
                 positions.append((x, y))
 
         def get_count_mines(x, y):
@@ -197,8 +197,8 @@ class MainWindow(QMainWindow):
             return count_mines
         for x in range(0, self.tiles_res):
             for y in range(0, self.tiles_res):
-                w = self.grid.itemAtPosition(y, x).widget()
-                w.mines_around = get_count_mines(x, y)
+                tile = self.grid.itemAtPosition(y, x).widget()
+                tile.mines_around = get_count_mines(x, y)
 
     def get_surrounding(self, x, y):
         positions = []
